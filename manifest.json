@@ -1,12 +1,18 @@
-{
-        "name": "Pokédex PWA",
-            "short_name": "Pokédex",
-                "description": "Pokédex PWA - Práctica Integrada",
-                    "start_url": "./Index.html",
-                        "display": "standalone",
-                            "background_color": "#101010",
-                                "theme_color": "#f45151",
-                                    "orientation": "portrait",
-                                        "icons": []
-                                        }
-}
+// REGISTRAR PWA
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                        .register("./sw.js")
+                                    .then(() => {
+                                                    console.log("PWA instalada correctamente");
+                                                                })
+                                                                            .catch((error) => {
+                                                                                            console.log("Error:", error);
+                                                                                                        });
+
+                                                                                                            });
+
+                                                                                                            }
