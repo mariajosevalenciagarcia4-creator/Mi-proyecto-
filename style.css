@@ -1,0 +1,207 @@
+* {
+        box-sizing: border-box;
+            margin: 0;
+                padding: 0;
+                }
+
+                body {
+                    font-family: Arial, sans-serif;
+                        background: #101010;
+                            color: white;
+                                min-height: 100vh;
+                                }
+
+
+                                /* ENCABEZADO */
+
+                                header {
+                                    background: #f45151;
+                                        text-align: center;
+                                            padding: 35px 15px 25px;
+                                            }
+
+                                            header h1 {
+                                                font-size: 42px;
+                                                    margin-bottom: 18px;
+                                                    }
+
+                                                    header p {
+                                                        font-size: 20px;
+                                                            color: #eeeeee;
+                                                            }
+
+
+                                                            /* CONTENIDO */
+
+                                                            main {
+                                                                width: 92%;
+                                                                    max-width: 700px;
+                                                                        margin: 25px auto;
+                                                                        }
+
+
+                                                                        /* BUSCADOR */
+
+                                                                        .buscador {
+                                                                            display: flex;
+                                                                                gap: 18px;
+                                                                                    margin-bottom: 20px;
+                                                                                    }
+
+                                                                                    input {
+                                                                                        background: #242424;
+                                                                                            border: 2px solid #363636;
+                                                                                                border-radius: 14px;
+                                                                                                    color: white;
+                                                                                                        font-size: 20px;
+                                                                                                            padding: 20px;
+                                                                                                                outline: none;
+                                                                                                                }
+
+                                                                                                                .buscador input {
+                                                                                                                    flex: 1;
+                                                                                                                    }
+
+                                                                                                                    input::placeholder {
+                                                                                                                        color: #999;
+                                                                                                                        }
+
+
+                                                                                                                        /* BOTONES */
+
+                                                                                                                        button {
+                                                                                                                            border: none;
+                                                                                                                                border-radius: 14px;
+                                                                                                                                    color: white;
+                                                                                                                                        font-size: 21px;
+                                                                                                                                            font-weight: bold;
+                                                                                                                                                padding: 19px;
+                                                                                                                                                    cursor: pointer;
+                                                                                                                                                    }
+
+                                                                                                                                                    #buscarBtn {
+                                                                                                                                                        background: #f45151;
+                                                                                                                                                            min-width: 145px;
+                                                                                                                                                            }
+
+                                                                                                                                                            .aleatorio {
+                                                                                                                                                                background: #4caf50;
+                                                                                                                                                                    width: 100%;
+                                                                                                                                                                        margin-bottom: 30px;
+                                                                                                                                                                        }
+
+                                                                                                                                                                        .autenticar {
+                                                                                                                                                                            background: #f45151;
+                                                                                                                                                                                width: 100%;
+                                                                                                                                                                                }
+
+
+                                                                                                                                                                                /* RESULTADO */
+
+                                                                                                                                                                                .resultado {
+                                                                                                                                                                                    background: #191919;
+                                                                                                                                                                                        border: 2px solid #363636;
+                                                                                                                                                                                            border-radius: 18px;
+                                                                                                                                                                                                text-align: center;
+                                                                                                                                                                                                    padding: 25px;
+                                                                                                                                                                                                        margin-bottom: 30px;
+                                                                                                                                                                                                            min-height: 130px;
+                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                            .resultado h2 {
+                                                                                                                                                                                                                color: #4caf50;
+                                                                                                                                                                                                                    margin-bottom: 10px;
+                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                    .resultado img {
+                                                                                                                                                                                                                        width: 180px;
+                                                                                                                                                                                                                            height: 180px;
+                                                                                                                                                                                                                                object-fit: contain;
+                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                .resultado h3 {
+                                                                                                                                                                                                                                    font-size: 28px;
+                                                                                                                                                                                                                                        margin: 10px;
+                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                        .datos {
+                                                                                                                                                                                                                                            color: #ddd;
+                                                                                                                                                                                                                                                font-size: 18px;
+                                                                                                                                                                                                                                                    line-height: 1.7;
+                                                                                                                                                                                                                                                    }
+
+
+                                                                                                                                                                                                                                                    /* ÁREA SEGURA */
+
+                                                                                                                                                                                                                                                    .segura {
+                                                                                                                                                                                                                                                        background: #191919;
+                                                                                                                                                                                                                                                            border: 2px solid #363636;
+                                                                                                                                                                                                                                                                border-radius: 18px;
+                                                                                                                                                                                                                                                                    padding: 30px;
+                                                                                                                                                                                                                                                                        text-align: center;
+                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                        .segura h2 {
+                                                                                                                                                                                                                                                                            color: #4caf50;
+                                                                                                                                                                                                                                                                                font-size: 27px;
+                                                                                                                                                                                                                                                                                    margin-bottom: 25px;
+                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                    .segura input {
+                                                                                                                                                                                                                                                                                        width: 100%;
+                                                                                                                                                                                                                                                                                            margin-bottom: 18px;
+                                                                                                                                                                                                                                                                                                text-align: center;
+                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                #mensaje {
+                                                                                                                                                                                                                                                                                                    margin-top: 18px;
+                                                                                                                                                                                                                                                                                                        font-size: 18px;
+                                                                                                                                                                                                                                                                                                            font-weight: bold;
+                                                                                                                                                                                                                                                                                                            }
+
+
+                                                                                                                                                                                                                                                                                                            /* CELULARES */
+
+                                                                                                                                                                                                                                                                                                            @media (max-width: 600px) {
+
+                                                                                                                                                                                                                                                                                                                header {
+                                                                                                                                                                                                                                                                                                                        padding: 30px 10px 25px;
+                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                header h1 {
+                                                                                                                                                                                                                                                                                                                                        font-size: 35px;
+                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                header p {
+                                                                                                                                                                                                                                                                                                                                                        font-size: 17px;
+                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                .buscador {
+                                                                                                                                                                                                                                                                                                                                                                        gap: 10px;
+                                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                                .buscador input {
+                                                                                                                                                                                                                                                                                                                                                                                        min-width: 0;
+                                                                                                                                                                                                                                                                                                                                                                                                font-size: 16px;
+                                                                                                                                                                                                                                                                                                                                                                                                        padding: 17px 12px;
+                                                                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                #buscarBtn {
+                                                                                                                                                                                                                                                                                                                                                                                                                        min-width: 105px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                padding: 15px 10px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 18px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                button {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 18px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                .segura {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        padding: 22px 15px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .segura h2 {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 23px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+}

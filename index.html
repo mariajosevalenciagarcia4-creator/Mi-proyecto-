@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+        <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0">
+
+                      <meta name="theme-color" content="#f45151">
+
+                          <title>Pokédex PWA</title>
+
+                              <link rel="stylesheet" href="style.css">
+
+                                  <link rel="manifest" href="manifest.json">
+                                  </head>
+
+                                  <body>
+
+                                      <header>
+                                              <h1>Pokédex PWA</h1>
+
+                                                      <p>
+                                                                  Práctica Integrada: Módulos 1, 2 y 3
+                                                                          </p>
+                                                                              </header>
+
+                                                                                  <main>
+
+                                                                                          <!-- BUSCADOR -->
+                                                                                                  <section class="buscador">
+
+                                                                                                              <input
+                                                                                                                              type="text"
+                                                                                                                                              id="pokemonInput"
+                                                                                                                                                              placeholder="Nombre o ID del Pokémon..."
+                                                                                                                                                                          >
+
+                                                                                                                                                                                      <button id="buscarBtn">
+                                                                                                                                                                                                      Buscar
+                                                                                                                                                                                                                  </button>
+
+                                                                                                                                                                                                                          </section>
+
+
+                                                                                                                                                                                                                                  <!-- BOTÓN ALEATORIO -->
+
+                                                                                                                                                                                                                                          <button id="aleatorioBtn" class="aleatorio">
+                                                                                                                                                                                                                                                      Pokémon Aleatorio
+                                                                                                                                                                                                                                                              </button>
+
+
+                                                                                                                                                                                                                                                                      <!-- RESULTADO -->
+
+                                                                                                                                                                                                                                                                              <section id="resultado" class="resultado">
+
+                                                                                                                                                                                                                                                                                          <h2>Busca un Pokémon</h2>
+
+                                                                                                                                                                                                                                                                                                      <p>
+                                                                                                                                                                                                                                                                                                                      Escribe su nombre o número para comenzar.
+                                                                                                                                                                                                                                                                                                                                  </p>
+
+                                                                                                                                                                                                                                                                                                                                          </section>
+
+
+                                                                                                                                                                                                                                                                                                                                                  <!-- ÁREA SEGURA -->
+
+                                                                                                                                                                                                                                                                                                                                                          <section class="segura">
+
+                                                                                                                                                                                                                                                                                                                                                                      <h2>Área Segura del Entrenador</h2>
+
+                                                                                                                                                                                                                                                                                                                                                                                  <input
+                                                                                                                                                                                                                                                                                                                                                                                                  type="password"
+                                                                                                                                                                                                                                                                                                                                                                                                                  id="pinInput"
+                                                                                                                                                                                                                                                                                                                                                                                                                                  maxlength="4"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  inputmode="numeric"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  placeholder="PIN de Seguridad (4 dígitos)"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                              >
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <button id="autenticarBtn" class="autenticar">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Autenticarse
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </button>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <p id="mensaje"></p>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </section>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </main>
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <script src="app.js"></script>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </body>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </html>q
