@@ -1,99 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex PWA Segura</title>
+  <link rel="icon" href="assets/192x192.png" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ef5350">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div id="offline-badge" class="offline-badge">Modo sin conexión activo (Cargando datos locales)</div>
+    
+    <h1>Pokédex PWA</h1>
+    <p style="color: #aaa;">Práctica Integrada: Módulos 1, 2 y 3</p>
+    
+    <div class="input-group">
+      <input type="text" id="poke-input" placeholder="Nombre o ID del Pokémon...">
+      <button id="search-btn">Buscar</button>
+    </div>
+    <button id="random-btn" class="btn-secundario" style="width: 100%; margin-bottom: 10px;">Pokémon Aleatorio</button>
 
-        <meta name="viewport"
-                  content="width=device-width, initial-scale=1.0">
+    <div id="loading">Consultando PokeAPI en segundo plano...</div>
+    <div id="error-msg"></div>
 
-                      <meta name="theme-color" content="#f45151">
+    <!-- Tarjeta del Pokémon -->
+    <div id="poke-card" class="card">
+      <h2 id="poke-name" style="margin: 0; text-transform: uppercase;"></h2>
+      <p id="poke-id" style="color: #ef5350; margin: 5px 0; font-weight: bold;"></p>
+      <img id="poke-img" src="" alt="pokemon">
+      <div id="poke-types" class="badge-container"></div>
+      
+      <div class="stats">
+        <div class="stat-row"><span>Ataque:</span> <span id="stat-attack" style="font-weight: bold;"></span></div>
+        <div class="stat-row"><span>Defensa:</span> <span id="stat-defense" style="font-weight: bold;"></span></div>
+        <div class="stat-row"><span>Velocidad:</span> <span id="stat-speed" style="font-weight: bold;"></span></div>
+      </div>
 
-                          <title>Pokédex PWA</title>
+      <button id="add-fav-btn" class="btn-secundario" style="margin-top: 15px; width: 100%;">Guardar Favorito Encriptado</button>
+    </div>
 
-                              <link rel="stylesheet" href="style.css">
+    <!-- Módulo 3: Autenticación del Entrenador -->
+    <div class="panel-seguro">
+      <h3 style="margin-top: 0; color: #4caf50;">Área Segura del Entrenador</h3>
+      <div id="login-form">
+        <input type="password" id="trainer-pin" placeholder="PIN de Seguridad (4 dígitos)" style="width: 90%; margin-bottom: 10px; text-align: center;">
+        <button id="login-btn" style="width: 100%;">Autenticarse</button>
+      </div>
+      <div id="secure-content" style="display: none;">
+        <p style="color: #4caf50; font-weight: bold; margin: 5px 0;">¡Sesión Protegida Activa!</p>
+        <div id="secure-fav-display" style="font-style: italic; margin-top: 10px;"></div>
+        <button id="logout-btn" style="background-color: #ff5252; margin-top: 10px; width: 100%;">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
 
-                                  <link rel="manifest" href="manifest.json">
-                                  </head>
-
-                                  <body>
-
-                                      <header>
-                                              <h1>Pokédex PWA</h1>
-
-                                                      <p>
-                                                                  Práctica Integrada: Módulos 1, 2 y 3
-                                                                          </p>
-                                                                              </header>
-
-                                                                                  <main>
-
-                                                                                          <!-- BUSCADOR -->
-                                                                                                  <section class="buscador">
-
-                                                                                                              <input
-                                                                                                                              type="text"
-                                                                                                                                              id="pokemonInput"
-                                                                                                                                                              placeholder="Nombre o ID del Pokémon..."
-                                                                                                                                                                          >
-
-                                                                                                                                                                                      <button id="buscarBtn">
-                                                                                                                                                                                                      Buscar
-                                                                                                                                                                                                                  </button>
-
-                                                                                                                                                                                                                          </section>
-
-
-                                                                                                                                                                                                                                  <!-- BOTÓN ALEATORIO -->
-
-                                                                                                                                                                                                                                          <button id="aleatorioBtn" class="aleatorio">
-                                                                                                                                                                                                                                                      Pokémon Aleatorio
-                                                                                                                                                                                                                                                              </button>
-
-
-                                                                                                                                                                                                                                                                      <!-- RESULTADO -->
-
-                                                                                                                                                                                                                                                                              <section id="resultado" class="resultado">
-
-                                                                                                                                                                                                                                                                                          <h2>Busca un Pokémon</h2>
-
-                                                                                                                                                                                                                                                                                                      <p>
-                                                                                                                                                                                                                                                                                                                      Escribe su nombre o número para comenzar.
-                                                                                                                                                                                                                                                                                                                                  </p>
-
-                                                                                                                                                                                                                                                                                                                                          </section>
-
-
-                                                                                                                                                                                                                                                                                                                                                  <!-- ÁREA SEGURA -->
-
-                                                                                                                                                                                                                                                                                                                                                          <section class="segura">
-
-                                                                                                                                                                                                                                                                                                                                                                      <h2>Área Segura del Entrenador</h2>
-
-                                                                                                                                                                                                                                                                                                                                                                                  <input
-                                                                                                                                                                                                                                                                                                                                                                                                  type="password"
-                                                                                                                                                                                                                                                                                                                                                                                                                  id="pinInput"
-                                                                                                                                                                                                                                                                                                                                                                                                                                  maxlength="4"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                  inputmode="numeric"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                  placeholder="PIN de Seguridad (4 dígitos)"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                              >
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <button id="autenticarBtn" class="autenticar">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Autenticarse
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </button>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <p id="mensaje"></p>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </section>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </main>
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <script src="app.js"></script>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div id="inicio">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <img src="icon-192.png" alt="Pikachu">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <h1>¡Bienvenido!</h1>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p>Mi aplicación Pokémon</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </html>
+  <script src="app.js"></script>
+</body>
+</html>

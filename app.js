@@ -1,168 +1,123 @@
-//Es el nucloe funcional de nuestra app
-//async/await -->Limpia mls datos resividos de la API para bloquear ataques xss y encripta la lista en el dispositivo por medio de una API 
- const pokemonInput = document.getElementById("pokemonInput");
- const buscarBtn = document.getElementById("buscarBtn");
- const aleatorioBtn = document.getElementById("aleatorioBtn");
- const resultado = document.getElementById("resultado");
+// Referencias a los elementos del DOM
+const pokemonInput = document.getElementById("poke-input");
+const searchButton = document.getElementById("search-btn");
+const randomButton = document.getElementById("random-btn");
+const loadingIndicator = document.getElementById("loading");
+const errorMessage = document.getElementById("error-msg");
+const pokemonCard = document.getElementById("poke-card");
+const pokemonName = document.getElementById("poke-name");
+const pokemonId = document.getElementById("poke-id");
+const pokemonImage = document.getElementById("poke-img");
+const pokemonTypes = document.getElementById("poke-types");
+const attackStat = document.getElementById("stat-attack");
+const defenseStat = document.getElementById("stat-defense");
+const speedStat = document.getElementById("stat-speed");
 
+// Elementos de Seguridad del Área Privada (Módulo 3)
+const trainerPin = document.getElementById("trainer-pin");
+const loginButton = document.getElementById("login-btn");
+const loginForm = document.getElementById("login-form");
+const secureContent = document.getElementById("secure-content");
+const secureFavoriteDisplay = document.getElementById("secure-fav-display");
+const addFavoriteButton = document.getElementById("add-fav-btn");
+const logoutButton = document.getElementById("logout-btn");
+const offlineBadge = document.getElementById("offline-badge");
 
- // BUSCAR POKÉMON
+let currentPokemon = null;
+let activePin = null;
 
- async function buscarPokemon(nombre) {
+// ERROR CRÍTICO 1: Sanitización incompatible con números
+function sanitizeInput(input) {
+    // Pista: ¿Qué pasa cuando 'input' es un número generado por el botón Aleatorio?
+    const characterMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#x27;",
+        "/": "&#x2F;",
+    };
+    return input.replace(/[&<>"'/]/g, (match) => characterMap[match]);
+}
 
-     if (!nombre) {
-             resultado.innerHTML = `
-                         <h2>Escribe un Pokémon</h2>
-                                     <p>Ingresa un nombre o número.</p>
-                                             `;
-                                                     return;
-                                                         }
+function encryptData(plainText, pin) {
+    const payload = `${pin}_${plainText}`;
+    return btoa(encodeURIComponent(payload));
+}
 
-                                                             resultado.innerHTML = `
-                                                                     <h2>Buscando...</h2>
-                                                                             <p>Espera un momento.</p>
-                                                                                 `;
+function decryptData(cipherText, pin) {
+    try {
+        const decodedPayload = decodeURIComponent(atob(cipherText));
+        const [savedPin, originalPokemon] = decodedPayload.split("_");
+        return savedPin === pin ? originalPokemon : null;
+    } catch (error) {
+        return null;
+    }
+}
 
-                                                                                     try {
+// Operación de Red Asíncrona
+async function fetchPokemon(query) {
+    loadingIndicator.style.display = "block";
+    errorMessage.textContent = "";
+    pokemonCard.style.display = "none";
 
-                                                                                             const respuesta = await fetch(
-                                                                                                         `https://pokeapi.co/api/v2/pokemon/${nombre.toLowerCase()}`
-                                                                                                                 );
+    const safeQuery = sanitizeInput(query).trim().toLowerCase();
 
-                                                                                                                         if (!respuesta.ok) {
-                                                                                                                                     throw new Error("No encontrado");
-                                                                                                                                             }
+    if (!safeQuery) {
+        errorMessage.textContent = "Por favor ingresa un nombre o ID válido.";
+        loadingIndicator.style.display = "none";
+        return;
+    }
 
-                                                                                                                                                     const pokemon = await respuesta.json();
+    // ERROR CRÍTICO 2: Protocolo inseguro (Mixed Content)
+    // Pista: Los navegadores modernos bloquean peticiones HTTP desde sitios seguros HTTPS
+    const secureUrl = `http://pokeapi.co/api/v2/pokemon/${safeQuery}`;
 
-                                                                                                                                                             const nombrePokemon =
-                                                                                                                                                                         pokemon.name.charAt(0).toUpperCase() +
-                                                                                                                                                                                     pokemon.name.slice(1);
+    try {
+        const response = await fetch(secureUrl);
 
-                                                                                                                                                                                             resultado.innerHTML = `
+        if (!response.ok) {
+            throw new Error("El Pokémon solicitado no existe.");
+        }
 
-                                                                                                                                                                                                         <img
-                                                                                                                                                                                                                         src="${pokemon.sprites.other["official-artwork"].front_default}"
-                                                                                                                                                                                                                                         alt="${nombrePokemon}"
-                                                                                                                                                                                                                                                     >
+        const data = await response.json();
+        currentPokemon = data.name.toUpperCase();
+        renderCard(data);
+    } catch (error) {
+        console.error("Fallo en la capa de red o parseo de datos:", error);
+        errorMessage.textContent = error.message;
+    } finally {
+        loadingIndicator.style.display = "none";
+    }
+}
 
-                                                                                                                                                                                                                                                                 <h3>${nombrePokemon}</h3>
+// Renderizado de Datos
+function renderCard(data) {
+    pokemonName.textContent = data.name;
+    pokemonId.textContent = `N° ${data.id}`;
+    pokemonImage.src =
+        data.sprites.front_default || "https://via.placeholder.com/130";
 
-                                                                                                                                                                                                                                                                             <div class="datos">
+    pokemonTypes.innerHTML = "";
+    data.types.forEach((typeInfo) => {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = typeInfo.type.name;
+        pokemonTypes.appendChild(badge);
+    });
 
-                                                                                                                                                                                                                                                                                             <p><strong>ID:</strong> #${pokemon.id}</p>
+    // ERROR CRÍTICO 3: Acceso incorrecto a propiedades del JSON
+    // Pista: Revisa la estructura real de la PokeAPI para "stats". ¿Es un objeto directo o un arreglo?
+    attackStat.textContent = data.stats.base_stat;
+    defenseStat.textContent = data.stats.base_stat;
+    speedStat.textContent = data.stats.base_stat;
 
-                                                                                                                                                                                                                                                                                                             <p>
-                                                                                                                                                                                                                                                                                                                                 <strong>Altura:</strong>
-                                                                                                                                                                                                                                                                                                                                                     ${pokemon.height / 10} m
-                                                                                                                                                                                                                                                                                                                                                                     </p>
+    pokemonCard.style.display = "block";
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                     <p>
-                                                                                                                                                                                                                                                                                                                                                                                                         <strong>Peso:</strong>
-                                                                                                                                                                                                                                                                                                                                                                                                                             ${pokemon.weight / 10} kg
-                                                                                                                                                                                                                                                                                                                                                                                                                                             </p>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                 `;
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } catch (error) {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                             resultado.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <h2>Pokémon no encontrado</h2>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Comprueba el nombre o número e inténtalo nuevamente.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         `;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             // BOTÓN BUSCAR
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             buscarBtn.addEventListener("click", () => {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 buscarPokemon(pokemonInput.value.trim());
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 });
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 // BUSCAR CON ENTER
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 pokemonInput.addEventListener("keydown", (event) => {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     if (event.key === "Enter") {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             buscarPokemon(pokemonInput.value.trim());
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 });
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 // POKÉMON ALEATORIO
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 aleatorioBtn.addEventListener("click", () => {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     const numero = Math.floor(Math.random() * 1025) + 1;
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         buscarPokemon(numero);
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         });
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         // ÁREA SEGURA
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         const autenticarBtn =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             document.getElementById("autenticarBtn");
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             const pinInput =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 document.getElementById("pinInput");
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 const mensaje =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     document.getElementById("mensaje");
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     autenticarBtn.addEventListener("click", () => {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         const pin = pinInput.value;
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             if (!/^\d{4}$/.test(pin)) {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     mensaje.textContent =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "El PIN debe tener exactamente 4 números.";
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         return;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 // PIN de ejemplo
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     if (pin === "1234") {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             mensaje.textContent =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "✅ Autenticación correcta.";
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             } else {
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     mensaje.textContent =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "❌ PIN incorrecto.";
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     // Registrar la PWA
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     if ("serviceWorker" in navigator) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         window.addEventListener("load", () => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 navigator.serviceWorker
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             .register("./sw.js")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         .then(() => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         console.log("PWA instalada correctamente");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     })
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 .catch((error) => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 console.log("Error:", error);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+// Escuchadores de Eventos (UI)
+searchButton.addEventListener("click", () => fetchPokemon(pokemonInput.value));
+randomButton.addEventListener("click", () => {
+    const randomId = Math.floor(Math.random() * 151) + 1;
+    fetchPokemon(randomId);
+});
