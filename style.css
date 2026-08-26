@@ -204,4 +204,27 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         font-size: 23px;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
-}
+#inicio {
+        min-height: 100vh;
+            display: flex;
+                flex-direction: column;
+                    justify-content: center;
+                        align-items: center;
+                            text-align: center;
+                                background: #ffcc00;
+                                }
+
+                                #inicio img {
+                                    width: 192px;
+                                        height: 192px;
+                                            object-fit: contain;
+                                            }
+
+                                            #inicio h1 {
+                                                font-size: 30px;
+                                                    margin: 15px 0 5px;
+                                                    }
+
+                                                    #inicio p {
+                                                        font-size: 18px;
+                                                        }

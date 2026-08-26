@@ -1,18 +1,16 @@
-// REGISTRAR PWA
-
-if ("serviceWorker" in navigator) {
-
-    window.addEventListener("load", () => {
-
-            navigator.serviceWorker
-                        .register("./sw.js")
-                                    .then(() => {
-                                                    console.log("PWA instalada correctamente");
-                                                                })
-                                                                            .catch((error) => {
-                                                                                            console.log("Error:", error);
-                                                                                                        });
-
-                                                                                                            });
-
-                                                                                                            }
+{
+      "name": "Mi proyecto",
+        "short_name": "Mi proyecto",
+          "start_url": "./",
+            "display": "standalone",
+              "background_color": "#ffffff",
+                "theme_color": "#000000",
+                  "icons": [
+                      {
+                            "src": "icon-192.png",
+                                  "sizes": "192x192",
+                                        "type": "image/png"
+                                            }
+                                              ]
+                                              }
+}
